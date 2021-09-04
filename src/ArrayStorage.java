@@ -8,9 +8,20 @@ public class ArrayStorage {
     }
 
     void save(Resume r) {
+        int i = size();
+        if (i < storage.length) {
+            storage[i] = r;
+        } else {
+            System.out.println("Storage is full!");
+        }
     }
 
     Resume get(String uuid) {
+        for (int i = 0; i < storage.length; i++) {
+            if (storage[i].uuid == uuid) {
+                return storage[i];
+            }
+        }
         return null;
     }
 
@@ -26,7 +37,7 @@ public class ArrayStorage {
 
     int size() {
         int i = 0;
-        while (storage[i] != null) {
+        while (storage[i] != null || i < storage.length) {
             i++;
         }
         return i;
