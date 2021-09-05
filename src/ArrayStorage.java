@@ -1,45 +1,62 @@
+import java.util.Arrays;
+import java.util.stream.IntStream;
+
 /**
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    Resume[] storage = new Resume[10000];
+    static Resume[] storage = new Resume[10000];
 
     void clear() {
+        Arrays.fill(storage, null);
     }
 
     void save(Resume r) {
-        int i = size();
-        if (i < storage.length) {
-            storage[i] = r;
-        } else {
-            System.out.println("Storage is full!");
+        for (int i = 0; i < storage.length; i++) {
+            if (storage[i] == null) {
+                storage[i] = r;
+                break;
+            }
         }
     }
 
     Resume get(String uuid) {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i].uuid == uuid) {
-                return storage[i];
+        for (Resume r : storage) {
+            if (r != null && r.uuid.equals(uuid)) {
+                return r;
             }
         }
         return null;
     }
 
     void delete(String uuid) {
+        for (int i = 0; i < storage.length; i++) {
+            if (storage[i].uuid.equals(uuid)) {
+                storage[i] = null;
+                IntStream.range(i + 1, storage.length).forEach(j -> storage[j - 1] = storage[j]);
+                storage[storage.length - 1] = null;
+                break;
+            }
+        }
     }
 
     /**
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        return new Resume[0];
+        return Arrays.copyOf(storage, size());
     }
 
     int size() {
-        int i = 0;
-        while (storage[i] != null || i < storage.length) {
-            i++;
+        int r = 0;
+        for (Resume resume : storage) {
+            if (resume != null) {
+                r++;
+            }
+            if (resume == null) {
+                break;
+            }
         }
-        return i;
+        return r;
     }
 }
