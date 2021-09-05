@@ -5,7 +5,7 @@ import java.util.stream.IntStream;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    static Resume[] storage = new Resume[10000];
+    Resume[] storage = new Resume[10000];
 
     void clear() {
         Arrays.fill(storage, null);
