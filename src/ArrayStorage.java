@@ -14,31 +14,28 @@ public class ArrayStorage {
     }
 
     void save(Resume r) {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i] == null) {
-                storage[i] = r;
-                size++;
-                break;
-            }
+        if (size < storage.length) {
+            storage[size] = r;
+            size++;
         }
     }
 
     Resume get(String uuid) {
-        for (Resume r : storage) {
-            if (r != null && r.uuid.equals(uuid)) {
-                return r;
+        for (int i = 0; i < size; i++) {
+            if (storage[i].uuid.equals(uuid)) {
+                return storage[i];
             }
         }
         return null;
     }
 
     void delete(String uuid) {
-        for (int i = 0; i < storage.length; i++) {
+        for (int i = 0; i < size; i++) {
             if (storage[i].uuid.equals(uuid)) {
                 storage[i] = null;
+                IntStream.range(i + 1, size).forEach(j -> storage[j - 1] = storage[j]);
+                storage[size - 1] = null;
                 size--;
-                IntStream.range(i + 1, storage.length).forEach(j -> storage[j - 1] = storage[j]);
-                storage[storage.length - 1] = null;
                 break;
             }
         }
