@@ -6,15 +6,18 @@ import java.util.stream.IntStream;
  */
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
+    private int size = 0;
 
     void clear() {
-        Arrays.fill(storage, null);
+        Arrays.fill(storage, 0, size, null);
+        size = 0;
     }
 
     void save(Resume r) {
         for (int i = 0; i < storage.length; i++) {
             if (storage[i] == null) {
                 storage[i] = r;
+                size++;
                 break;
             }
         }
@@ -33,6 +36,7 @@ public class ArrayStorage {
         for (int i = 0; i < storage.length; i++) {
             if (storage[i].uuid.equals(uuid)) {
                 storage[i] = null;
+                size--;
                 IntStream.range(i + 1, storage.length).forEach(j -> storage[j - 1] = storage[j]);
                 storage[storage.length - 1] = null;
                 break;
@@ -44,19 +48,10 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        return Arrays.copyOf(storage, size());
+        return Arrays.copyOf(storage, size);
     }
 
     int size() {
-        int r = 0;
-        for (Resume resume : storage) {
-            if (resume != null) {
-                r++;
-            }
-            if (resume == null) {
-                break;
-            }
-        }
-        return r;
+        return size;
     }
 }
